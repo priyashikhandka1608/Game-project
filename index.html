@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ping Pong Ball Game</title>
+    <style>
+        body {
+            text-align: center;
+            background-color: #f5f5dc;
+            /* Light cream background */
+            margin: 0;
+            padding: 0;
+            background-image: url('gameImage.jpg');
+            /* Background image outside the game box */
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+        }
+
+        .game-container {
+            position: relative;
+            display: inline-block;
+            background-color: #fff;
+            /* Canvas background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            animation: slideIn 1s ease-out;
+        }
+
+        @keyframes slideIn {
+            0% {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        canvas {
+            border: 2px solid black;
+            margin: 20px auto;
+            background-color: #e6f7ff;
+            /* Lighter blue background inside the game box */
+            animation: canvasBounce 2s infinite;
+        }
+
+        @keyframes canvasBounce {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.02);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        h1 {
+            margin-bottom: 5px;
+        }
+
+        .score-level-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        #score,
+        #level {
+            font-size: 18px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        @keyframes levelUp {
+            0% {
+                transform: scale(1);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.5);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .buttons {
+            margin-top: 20px;
+        }
+
+        #exitButton {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            display: none;
+        }
+
+        #exitButton:hover {
+            background-color: darkred;
+        }
+
+        #gameOverPopup {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            text-align: center;
+            animation: popupSlideIn 0.5s ease-out;
+        }
+
+        @keyframes popupSlideIn {
+            0% {
+                transform: translate(-50%, -50%) scale(0.7);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        #gameOverPopup button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        #gameOverPopup button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="game-container">
+        <h1>Ping Pong Ball Game</h1>
+        <div class="score-level-container">
+            <div id="score">Score: 0</div>
+            <div id="level">Level: 1</div>
+        </div>
+        <button id="startButton">Start Game</button>
+        <div class="buttons">
+            <button id="playAgainButton" style="display:none;">Play Again</button>
+        </div>
+        <canvas id="gameCanvas" width="600" height="400"></canvas>
+        <div id="gameOverPopup">
+            <p>Game Over!</p>
+            <button id="retryButton">Retry</button>
+        </div>
+    </div>
+    <button id="exitButton" onclick="exitGame()">Exit</button>
+    <script src="game.js"></script>
+</body>
+
+</html>
