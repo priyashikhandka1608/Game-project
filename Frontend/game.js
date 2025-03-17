@@ -55,50 +55,48 @@
  * * Responsive Game Start:
  *   The game has a smooth start with a "Start Game" button that transitions into the game, while the "Play Again" button becomes available after the game ends.
  */
+
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
 const startButton = document.getElementById('startButton');
 const playAgainButton = document.getElementById('playAgainButton');
 const retryButton = document.getElementById('retryButton');
 const exitButton = document.getElementById('exitButton');
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
 const scoreDisplay = document.getElementById('score');
 const levelDisplay = document.getElementById('level');
 const gameOverPopup = document.getElementById('gameOverPopup');
+const highScoresList = document.getElementById('highScoresList');
 
-let ballRadius = 10;
-let x = canvas.width / 2;
-let y = canvas.height - 30;
-let dx = 2;
-let dy = -2;
-let paddleHeight = 10;
-let paddleWidth = 75;
-let paddleX = (canvas.width - paddleWidth) / 2;
-let rightPressed = false;
-let leftPressed = false;
-let score = 0;
-let level = 1;
+let ballRadius = 15;
+let x, y, dx, dy;
+let paddleHeight = 20, paddleWidth = 100, paddleX;
+let rightPressed = false, leftPressed = false;
+let score = 0, level = 1;
 let gameStarted = false;
+const rightKey = 39, leftKey = 37;
+let playerName = localStorage.getItem("playerName") || "";
 
-const rightKey = 39;
-const leftKey = 37;
+document.addEventListener('keydown', e => {
+    if (e.keyCode === rightKey) rightPressed = true;
+    if (e.keyCode === leftKey) leftPressed = true;
+});
 
-document.addEventListener('keydown', keyDownHandler, false);
-document.addEventListener('keyup', keyUpHandler, false);
+document.addEventListener('keyup', e => {
+    if (e.keyCode === rightKey) rightPressed = false;
+    if (e.keyCode === leftKey) leftPressed = false;
+});
 
-function keyDownHandler(e) {
-    if (e.keyCode === rightKey) {
-        rightPressed = true;
-    } else if (e.keyCode === leftKey) {
-        leftPressed = true;
-    }
-}
-
-function keyUpHandler(e) {
-    if (e.keyCode === rightKey) {
-        rightPressed = false;
-    } else if (e.keyCode === leftKey) {
-        leftPressed = false;
-    }
+function initializeGame() {
+    score = 0;
+    level = 1;
+    updateScore();
+    updateLevel();
+    x = canvas.width / 2;
+    y = canvas.height - 30;
+    dx = 2;
+    dy = -2;
+    paddleX = (canvas.width - paddleWidth) / 2;
+    gameStarted = true;
 }
 
 function drawBall() {
@@ -113,24 +111,20 @@ function drawBall() {
 }
 
 function drawPaddle() {
-    ctx.beginPath();
-    ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
-    ctx.fillStyle = "brown"; 
-    ctx.fill();
-    ctx.closePath();
+    ctx.fillStyle = "brown";
+    ctx.fillRect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
 }
 
 function updateScore() {
-    scoreDisplay.textContent = "Score: " + score;
+    scoreDisplay.textContent = `Score: ${score}`;
 }
 
 function updateLevel() {
-    levelDisplay.textContent = "Level: " + level;
+    levelDisplay.textContent = `Level: ${level}`;
     levelDisplay.style.animation = 'levelUp 0.5s ease-out';
 }
 
 function increaseSpeed() {
-   
     dx = 2 + (level - 1) * 0.5;
     dy = -2 - (level - 1) * 0.5;
 }
@@ -145,7 +139,6 @@ function checkLevelUp() {
 
 function draw() {
     if (!gameStarted) return;
-
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBall();
     drawPaddle();
@@ -153,78 +146,100 @@ function draw() {
     x += dx;
     y += dy;
 
-    if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
-        dx = -dx;
-    }
-    if (y + dy < ballRadius) {
-        dy = -dy;
-    } else if (y + dy > canvas.height - ballRadius) {
+    if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) dx = -dx;
+    if (y + dy < ballRadius) dy = -dy;
+    else if (y + dy > canvas.height - ballRadius) {
         if (x > paddleX && x < paddleX + paddleWidth) {
             dy = -dy;
             score++;
             updateScore();
-            checkLevelUp(); 
+            checkLevelUp();
         } else {
             gameStarted = false;
             showGameOver();
         }
     }
 
-    if (rightPressed && paddleX < canvas.width - paddleWidth) {
-        paddleX += 5;
-        paddleX = Math.min(paddleX, canvas.width - paddleWidth);
-    } else if (leftPressed && paddleX > 0) {
-        paddleX -= 5;
-        paddleX = Math.max(paddleX, 0); 
-    }
-
+    if (rightPressed) paddleX = Math.min(paddleX + 5, canvas.width - paddleWidth);
+    if (leftPressed) paddleX = Math.max(paddleX - 5, 0);
+    
     requestAnimationFrame(draw);
 }
 
+startButton.addEventListener("click", function () {
+    let inputPlayerName = document.getElementById("playerName").value.trim();
+    
+    if (!inputPlayerName) {
+        alert("Please enter your name before starting the game.");
+        return;
+    }
+
+    playerName = inputPlayerName;
+    localStorage.setItem("playerName", playerName);
+    startGame();
+});
+
 function startGame() {
-    score = 0;
-    level = 1;
-    updateScore();
-    updateLevel();
-    x = canvas.width / 2;
-    y = canvas.height - 30;
-    dx = 2;
-    dy = -2;
-    paddleX = (canvas.width - paddleWidth) / 2;
-    gameStarted = true;
+    console.log(`Game started for ${playerName}`);
+    document.getElementById("playerName").disabled = true;
     startButton.style.display = "none";
     playAgainButton.style.display = "none";
     exitButton.style.display = "inline";
+    
+    initializeGame();
     draw();
 }
 
 function playAgain() {
-    score = 0;
-    level = 1;
-    updateScore();
-    updateLevel();
-    x = canvas.width / 2;
-    y = canvas.height - 30;
-    dx = 2;
-    dy = -2;
-    paddleX = (canvas.width - paddleWidth) / 2;
-    gameStarted = true;
-    startButton.style.display = "none";
-    playAgainButton.style.display = "none";
-    exitButton.style.display = "inline";
-    gameOverPopup.style.display = "none"; 
-    draw();
+    initializeGame();
+    gameOverPopup.style.display = "none";
+    startGame();
 }
 
 function showGameOver() {
     gameOverPopup.style.display = "block";
+    saveScore();
 }
 
 function exitGame() {
     window.location.reload();
 }
 
-startButton.addEventListener('click', startGame);
+function fetchHighScores() {
+    fetch("http://localhost:3000/high-scores")
+        .then(response => response.json())
+        .then(data => {
+            highScoresList.innerHTML = ""; 
+
+            // Sort scores in descending order
+            data.sort((a, b) => b.score - a.score);
+
+            if (data.length > 0) {
+                document.getElementById("highScoresContainer").style.display = "block";
+                data.forEach((entry, index) => {
+                    const listItem = document.createElement("li");
+                    listItem.textContent = `${index + 1}. ${entry.player}: ${entry.score}`;
+                    highScoresList.appendChild(listItem);
+                });
+            } else {
+                document.getElementById("highScoresContainer").style.display = "none"; 
+            }
+        })
+        .catch(error => console.error("Error fetching high scores:", error));
+}
+
+function saveScore() {
+    fetch("http://localhost:3000/save-score", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ player: playerName, score })
+    })
+    .then(response => response.json())
+    .then(() => fetchHighScores())
+    .catch(error => console.error("Error saving score:", error));
+}
+
+document.addEventListener("DOMContentLoaded", fetchHighScores);
 playAgainButton.addEventListener('click', playAgain);
 retryButton.addEventListener('click', playAgain);
 exitButton.addEventListener('click', exitGame);
