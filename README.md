@@ -4,44 +4,45 @@
 Priyashi Khandka
 
 ## Description
-The Ping Pong Ball Game is a simple arcade-style game where the player controls a paddle at the bottom of the screen to bounce a ball. The objective is to keep the ball in play and score points by hitting it with the paddle. The game progressively increases in difficulty as the ball's speed increases with each level.
+The Ping Pong Ball Game is a multiplayer arcade-style game where two players control paddles to keep the ball in play. The objective is to prevent the ball from passing their paddle while trying to outlast the opponent. The game progressively increases in difficulty as the ball's speed increases with levels.
 
-The game ends when the ball falls past the paddle, resulting in a "Game Over." Afterward, the player can choose to replay the game or exit.
+The game ends when one player misses the ball, awarding a point to the opponent. The first player to reach the winning score is declared the winner. Players can start a new game, retry after a game over, or exit the game at any time. Game progress and records are stored for later reference.
 
 ## Gameplay
 
 ### Movement
-- The player controls the paddle using the **left-arrow key** and **right-arrow key** to move it left and right, respectively.
+- **Player 1**: Moves the paddle left and right using the **left-arrow key** and **right-arrow key**.
+- **Player 2**: Moves the paddle using the **Shift (left) key** and **Ctrl (right) key**.
 
 ### Scoring
-- Players score points each time the ball successfully hits the paddle.
-- The score is displayed at the top of the screen.
-  
+- A player earns a point when the opponent misses the ball.
+- The game ends when one player reaches the winning score.
+
 ### Leveling Up
-- The player advances to the next level after reaching **1 point per level**.
-- The ball’s speed increases with each level, making the game more challenging.
+- The game difficulty increases every **5 seconds** as the ball's speed increases.
+- Higher levels make paddle control and timing more challenging.
 
 ### Game Over
-- The game ends when the ball falls past the paddle.
-- A **Game Over** popup will appear, offering options to either retry or exit the game.
+- The game ends when a player reaches the winning score, triggering a **Game Over** popup with options to retry or exit.
 
 ## Features
-- **Paddle Movement**: Control the paddle’s position left and right using the keyboard’s arrow keys.
-- **Ball Movement**: The ball bounces off the paddle, walls, and ceiling, with increasing speed as the player progresses.
-- **Score and Level System**: The score increases each time the ball hits the paddle. The level advances after every point, and the ball speed increases accordingly.
-- **Game Over Popup**: When the ball falls below the paddle, a Game Over screen appears with options to retry or exit.
-- **Level-Up Animation**: The level display animates each time the player reaches a new level, providing a visual cue for progression.
-- **Exit Button**: A button that allows the player to exit the game at any point during gameplay.
-- **High Score and Name Storage**: 
-  - Players can enter their name before starting the game.
-  - Scores are saved locally and displayed in a high-score list.
-  - The game fetches high scores from a local server and sorts them in descending order.
-  - After a game over, the player's score is automatically saved and compared with previous high scores.
+- **Multiplayer Paddle Movement**: Both players control their paddles using designated keyboard keys.
+- **Ball Movement**: The ball dynamically bounces off the walls and paddles, with speed increasing over time.
+- **Score and Level System**: Players earn points when the opponent fails to hit the ball. Scores and levels are displayed in real-time.
+- **Game Over Popup**: A popup appears when the game ends, displaying the winner and offering retry or exit options.
+- **Exit Button**: Allows players to quit the game at any point.
+- **Responsive Game Start**: The game starts smoothly with a "Start Game" button, and a "Play Again" button appears after the game ends.
+- **Local Storage**: Stores player names and past match records for later reference.
+- **Match History**: Displays past game records fetched from storage.
+- **Fetch API Integration**: Saves and retrieves match records using API endpoints.
 
 ## How to Play
-1. Enter your name in the provided input field before starting the game.
-2. Use the **left-arrow key** and **right-arrow key** to move the paddle left and right.
-3. The ball bounces automatically. Try to hit the ball with the paddle.
-4. Score points by hitting the ball with the paddle.
-5. The game ends when the ball falls past the paddle.
-6. If the game ends, your score is saved, and you can either retry or exit the game using the buttons provided.
+1. Start the game and enter your player names.
+2. **Player 1**: Use the **left-arrow key** and **right-arrow key** to move the paddle.
+3. **Player 2**: Use the **Shift (left) key** and **Ctrl (right) key** to move the paddle.
+4. The ball bounces dynamically; try to hit the ball with your paddle.
+5. Score points by making the opponent miss the ball.
+6. The first player to reach the winning score wins the game.
+7. After the game ends, players can retry or exit using the provided options.
+
+Enjoy the game and challenge your friends to a thrilling match!
